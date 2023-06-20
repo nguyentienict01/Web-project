@@ -1,9 +1,20 @@
-import {Link} from "react-router-dom";
-import {useContext} from "react";
-import {UserContext} from "./UserContext.jsx";
+import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { UserContext } from "./UserContext.jsx";
 
 export default function Header() {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const [showSearch, setShowSearch] = useState(false);
+
+  const handleSearchClick = () => {
+    setShowSearch(!showSearch);
+  }
+
+  const closeSearch = (e) => {
+    if (e.target === e.currentTarget) {
+      setShowSearch(false);
+    }
+  }
   return (
     <header className="flex justify-between">
       <Link to={'/'} className="flex items-center gap-1">
@@ -17,14 +28,19 @@ export default function Header() {
         <div className="border-l border-gray-300"></div>
         <div>Any week</div>
         <div className="border-l border-gray-300"></div>
-        <div>Add guests</div>
-        <button className="bg-primary text-white p-1 rounded-full">
+        <div>Any guests</div>
+        <button className="bg-primary text-white p-1 rounded-full" onClick={handleSearchClick}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
         </button>
+        {showSearch && (
+          <div className="fixed top-0 left-0 w-full h-full flex justify-center items-start bg-black bg-opacity-50" onClick={closeSearch}>
+            <input type="text" placeholder="Search your place..." className="p-2 pl-5 w-1/2 mt-[25vh]" />
+          </div>
+        )}
       </div>
-      <Link to={user?'/account':'/login'} className="flex items-center gap-2 border border-gray-300 rounded-full py-2 px-4 ">
+      <Link to={user ? '/account' : '/login'} className="flex items-center gap-2 border border-gray-300 rounded-full py-2 px-4 ">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
