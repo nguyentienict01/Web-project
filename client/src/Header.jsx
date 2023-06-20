@@ -1,13 +1,25 @@
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContext.jsx";
+import axios from 'axios';
+import { useNavigate  } from "react-router-dom";
 
 export default function Header() {
   const { user } = useContext(UserContext);
   const [showSearch, setShowSearch] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const navigate = useNavigate();
 
   const handleSearchClick = () => {
     setShowSearch(!showSearch);
+    console.log(searchInput);
+    if (searchInput) {
+      navigate(`/search?title=${encodeURIComponent(searchInput)}`);
+    }
+  }
+
+  const handleInputChange = (e) => {
+    setSearchInput(e.target.value);
   }
 
   const closeSearch = (e) => {
@@ -36,7 +48,14 @@ export default function Header() {
         </button>
         {showSearch && (
           <div className="fixed top-0 left-0 w-full h-full flex justify-center items-start bg-black bg-opacity-50" onClick={closeSearch}>
-            <input type="text" placeholder="Search your place..." className="p-2 pl-5 w-1/2 mt-[25vh]" />
+            <input
+              type="text"
+              placeholder="Search your place..."
+              className="p-2 pl-5 w-1/2 mt-[25vh]"
+              value={searchInput}
+              onChange={handleInputChange}
+              onKeyDown={event => event.key === 'Enter' ? handleSearchClick() : null}
+            />
           </div>
         )}
       </div>

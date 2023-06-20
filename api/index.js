@@ -17,6 +17,8 @@ const mime = require('mime-types');
 require('dotenv').config();
 const app = express();
 
+mongoose.set('strictQuery', true);
+
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
 const bucket = 'dawid-booking-app';
@@ -161,7 +163,7 @@ app.get('/user-places', (req, res) => {
   });
 });
 
-app.get('/places/:id', async (req, res) => {
+app.get('/places/id/:id', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { id } = req.params;
   res.json(await Place.findById(id));
@@ -192,6 +194,15 @@ app.get('/places', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.json(await Place.find());
 });
+
+app.get('/places/search', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { title } = req.query;  
+  console.log(title);
+  const places = await Place.find({ title: new RegExp(title, 'i') });
+  res.json(places);
+});
+
 
 app.post('/bookings', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
