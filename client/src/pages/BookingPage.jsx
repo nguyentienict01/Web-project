@@ -1,23 +1,32 @@
-import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import AddressLink from "../AddressLink";
 import PlaceGallery from "../PlaceGallery";
 import BookingDates from "../BookingDates";
 
 export default function BookingPage() {
-  const {id} = useParams();
-  const [booking,setBooking] = useState(null);
+  const { id } = useParams();
+  const [booking, setBooking] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (id) {
       axios.get('http://localhost:4000/bookings').then(response => {
-        const foundBooking = response.data.find(({_id}) => _id === id);
+        const foundBooking = response.data.find(({ _id }) => _id === id);
         if (foundBooking) {
           setBooking(foundBooking);
         }
       });
     }
   }, [id]);
+
+  const deleteBooking = () => {
+    axios.delete(`http://localhost:4000/bookings/delete/${id}`)
+      .then(response => {
+        navigate('/account/bookings');
+      });
+  }
 
   if (!booking) {
     return '';
@@ -38,6 +47,10 @@ export default function BookingPage() {
         </div>
       </div>
       <PlaceGallery place={booking.place} />
+      <div className="flex justify-center items-center">
+        <button className="mt-5 bg-primary text-white px-6 py-4 rounded-xl text-2xl" onClick={() => deleteBooking(booking._id)}>Delete booking</button>
+      </div>
+
     </div>
   );
 }

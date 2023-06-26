@@ -4,25 +4,19 @@ import { Outlet } from "react-router-dom";
 
 export default function Layout() {
   return (
-
     <>
-      <div className="min-h-screen mx-auto">
-        <div className="px-8 flex flex-col max-w-4xl mx-auto">
-          <div className="sticky top-0">
-            <Header />
-          </div>
-          <div className="">
-            <Outlet />
-          </div>
-          <div style={{ height: "1000px" }}></div>
+      <div className="min-h-screen mx-auto flex flex-col ">
+        <div className="top-0 max-w-4xl mx-auto z-30">
+          <Header />
         </div>
-        
-        <div className="bottom-0 sticky">
+        <div className="px-8 flex flex-col max-w-4xl mx-auto flex-grow">
+          <Outlet />
+        </div>
+        <div className="bottom-0">
           <Footer />
         </div>
       </div>
-
-
     </>
   );
 }
+
