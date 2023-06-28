@@ -3,6 +3,7 @@ import {UserContext} from "../UserContext.jsx";
 import {Link, Navigate, useParams} from "react-router-dom";
 import axios from "axios";
 import PlacesPage from "./PlacesPage";
+import FavoritesPage from "./FavoritesPage";
 import AccountNav from "../AccountNav";
 
 export default function ProfilePage() {
@@ -41,6 +42,9 @@ export default function ProfilePage() {
       )}
       {subpage === 'places' && (
         <PlacesPage />
+      )}
+      {subpage === 'favorites' && ( 
+        <FavoritesPage />
       )}
     </div>
   );

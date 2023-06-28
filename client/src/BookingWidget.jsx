@@ -27,26 +27,40 @@ export default function BookingWidget({ place }) {
     );
   }
 
-  async function bookThisPlace() {
-    const response = await axios.post("http://localhost:4000/bookings", {
-      checkIn,
-      checkOut,
-      numberOfGuests,
-      name,
-      phone,
-      place: place._id,
-      price: numberOfNights * place.price,
-    });
-    const bookingId = response.data._id;
-    setRedirect(`/account/bookings/${bookingId}`);
+  async function bookThisPlace(e) {
+    e.preventDefault();
+    if (numberOfGuests > place.maxGuests) {
+      alert(`The max number of guests for this place is ${place.maxGuests}`);
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:4000/bookings", {
+        checkIn,
+        checkOut,
+        numberOfGuests,
+        name,
+        phone,
+        place: place._id,
+        price: numberOfNights * place.price,
+      });
+      const bookingId = response.data._id;
+      setRedirect(`/account/bookings/${bookingId}`);
+    } catch (error) {
+      if (error.response && error.response.data.message === "No available room") {
+        alert("No available room. Please choose another time.");
+      } else {
+        console.log(error);
+      }
+    }
   }
+  
 
   if (redirect) {
     return <Navigate to={redirect} />;
   }
 
   return (
-    <div className="bg-white shadow p-4 rounded-2xl">
+    <form onSubmit={bookThisPlace} className="bg-white shadow p-4 rounded-2xl">
       <div className="text-2xl text-center">
         Price: ${place.price} / per night
       </div>
@@ -58,6 +72,7 @@ export default function BookingWidget({ place }) {
               type="date"
               value={checkIn}
               onChange={(ev) => setCheckIn(ev.target.value)}
+              required
             />
           </div>
           <div className="py-3 px-4 border-l">
@@ -66,6 +81,7 @@ export default function BookingWidget({ place }) {
               type="date"
               value={checkOut}
               onChange={(ev) => setCheckOut(ev.target.value)}
+              required
             />
           </div>
         </div>
@@ -75,6 +91,7 @@ export default function BookingWidget({ place }) {
             type="number"
             value={numberOfGuests}
             onChange={(ev) => setNumberOfGuests(ev.target.value)}
+            required
           />
         </div>
         {numberOfNights > 0 && (
@@ -84,20 +101,22 @@ export default function BookingWidget({ place }) {
               type="text"
               value={name}
               onChange={(ev) => setName(ev.target.value)}
+              required
             />
             <label>Phone number:</label>
             <input
               type="tel"
               value={phone}
               onChange={(ev) => setPhone(ev.target.value)}
+              required
             />
           </div>
         )}
       </div>
-      <button onClick={bookThisPlace} className="primary mt-4">
+      <button type="submit" className="primary mt-4">
         Book this place
         {numberOfNights > 0 && <span> ${numberOfNights * place.price}</span>}
       </button>
-    </div>
+    </form>
   );
 }

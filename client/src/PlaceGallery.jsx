@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import Image from "./Image.jsx";
 
 export default function PlaceGallery({ place }) {
+
   const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   if (showAllPhotos) {
@@ -43,6 +45,7 @@ export default function PlaceGallery({ place }) {
                 </div>
               ))}
           </div>
+
         </div>
       </div>
     );
@@ -60,6 +63,7 @@ export default function PlaceGallery({ place }) {
                 src={place.photos[0]}
                 alt=""
               />
+
             </div>
           )}
         </div>
@@ -80,6 +84,7 @@ export default function PlaceGallery({ place }) {
                 src={place.photos[2]}
                 alt=""
               />
+
             )}
           </div>
         </div>
