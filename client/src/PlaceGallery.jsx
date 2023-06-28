@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import Image from "./Image.jsx";
 
 export default function PlaceGallery({ place }) {
+
   const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   if (showAllPhotos) {
