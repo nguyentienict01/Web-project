@@ -1,28 +1,17 @@
-import Footer from "./Footer";
+import { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
-import { Outlet } from "react-router-dom";
 
 export default function Layout() {
   return (
-
-    <>
-      <div className="min-h-screen mx-auto">
-        <div className="px-8 flex flex-col max-w-4xl mx-auto">
-          <div className="sticky top-0">
-            <Header />
-          </div>
-          <div className="">
-            <Outlet />
-          </div>
-          <div style={{ height: "1000px" }}></div>
-        </div>
-        
-        <div className="bottom-0 sticky">
-          <Footer />
-        </div>
+    <div className=" flex flex-col min-h-screen ">
+      <div className="px-[40px] lg:px-[80px] 2xl:px-[100px] relative z-20">
+        <Header />
       </div>
-
-
-    </>
+      <div className="w-full border border-b border-gray-100"></div>
+      <div className="px-[40px] lg:px-[80px] 2xl:px-[100px]">
+        <Outlet />
+      </div>
+    </div>
   );
 }
