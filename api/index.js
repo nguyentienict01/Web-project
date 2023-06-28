@@ -203,6 +203,27 @@ app.get('/places/search', async (req, res) => {
   res.json(places);
 });
 
+app.delete('/places/delete/:id', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { id } = req.params;
+  const userData = await getUserDataFromReq(req);
+  const place = await Place.findById(id);
+  if (!place) {
+    res.status(404).json({ error: 'Place not found' });
+    return;
+  }
+  if (String(place.owner) !== String(userData.id)) {
+    res.status(403).json({ error: 'User not authorized to delete this place' });
+    return;
+  }
+  Place.findByIdAndRemove(id, (err) => {
+    if (err) {
+      res.status(500).json({ error: 'An error occurred while trying to delete place' });
+    } else {
+      res.json({ message: 'Place deleted successfully' });
+    }
+  });
+});
 
 app.post('/bookings', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
@@ -220,6 +241,27 @@ app.post('/bookings', async (req, res) => {
   });
 });
 
+app.delete('/bookings/delete/:id', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { id } = req.params;
+  const userData = await getUserDataFromReq(req);
+  const booking = await Booking.findById(id);
+  if (!booking) {
+    res.status(404).json({ error: 'Booking not found' });
+    return;
+  }
+  if (String(booking.user) !== String(userData.id)) {
+    res.status(403).json({ error: 'User not authorized to delete this booking' });
+    return;
+  }
+  Booking.findByIdAndRemove(id, (err) => {
+    if (err) {
+      res.status(500).json({ error: 'An error occurred while trying to delete booking' });
+    } else {
+      res.json({ message: 'Booking deleted successfully' });
+    }
+  });
+});
 
 
 app.get('/bookings', async (req, res) => {
