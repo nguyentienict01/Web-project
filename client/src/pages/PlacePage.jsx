@@ -68,7 +68,6 @@ export default function PlacePage() {
         );
         setIsFavorited(true);
       }
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
