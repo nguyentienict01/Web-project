@@ -4,15 +4,20 @@ import {
   StarIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { Controller } from "swiper";
+import { Controller, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "../Image";
 import { classNames } from "../common/helpers";
+import { useNavigate } from "react-router-dom";
 
 function PlaceSlider({ places = [] }) {
   const [swiperController, setSwiperController] = useState();
   const [canNext, setCanNext] = useState(false);
   const [canPrev, setCanPrev] = useState(false);
+  const navigate = useNavigate();
+  const handleClickPlaceCard = (id) => {
+    navigate("/place/id/" + id);
+  };
   useEffect(() => {
     const handleResize = () => {
       if (swiperController) {
@@ -22,17 +27,16 @@ function PlaceSlider({ places = [] }) {
     };
     handleResize();
     window.addEventListener("resize", handleResize);
-    document.addEventListener("DOMContentLoaded", handleResize)
+    document.addEventListener("DOMContentLoaded", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-      document.removeEventListener("DOMContentLoaded", handleResize)
-
+      document.removeEventListener("DOMContentLoaded", handleResize);
     };
   }, [swiperController]);
   return (
     <div className={"relative"}>
       <Swiper
-        modules={[Controller]}
+        modules={[Controller, Pagination]}
         onSwiper={setSwiperController}
         slidesPerView={10}
         spaceBetween={48}
@@ -54,14 +58,19 @@ function PlaceSlider({ places = [] }) {
           setCanPrev(!event?.isBeginning);
           setCanNext(!event?.isEnd);
         }}
+        pagination={{
+          class: "!bottom-[0px]",
+        }}
+        wrapperClass="items-stretch pb-[40px]"
       >
         {places?.map((place, index) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="h-auto">
               <div
                 className={classNames(
-                  "flex w-full justify-center transition-all cursor-pointer"
+                  "flex w-full h-full justify-center transition-all cursor-pointer"
                 )}
+                onClick={() => handleClickPlaceCard(place._id)}
               >
                 <div
                   className={
@@ -77,19 +86,26 @@ function PlaceSlider({ places = [] }) {
                     width={100}
                     height={100}
                   />
-                  <div className="flex flex-col gap-[2px] w-full">
+                  <div className="flex flex-col gap-[2px] w-full flex-1">
                     <div className="flex justify-between gap-1">
-                      <h4 className="text-base font-semibold line-clamp-1">{place.title}, {place.address}</h4>
+                      <h4 className="text-base font-semibold line-clamp-1">
+                        {place.title}, {place.address}
+                      </h4>
                       <span className="text-base flex items-center">
                         <StarIcon className="w-4 h-4 mr-1" />{" "}
-                        <span className="text-sm">{place.rating?.toFixed(2) || "0.00"}</span>
+                        <span className="text-sm">
+                          {place.rating?.toFixed(2) || "0.00"}
+                        </span>
                       </span>
                     </div>
-                    <p className="text-sm text-secondary">
+                    <p className="text-sm text-secondary flex-1 line-clamp-2">
                       {place.address}
                     </p>
                     <p className="text-sm">
-                    <span className="text-md font-semibold">{place.price}$ / </span> <span>night</span>   
+                      <span className="text-md font-semibold">
+                        {place.price}$ /{" "}
+                      </span>{" "}
+                      <span>night</span>
                     </p>
                   </div>
                 </div>
