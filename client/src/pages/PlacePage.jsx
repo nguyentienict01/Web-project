@@ -9,6 +9,7 @@ import ReviewBlock from "../components/ReviewBlock";
 export default function PlacePage() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
+
   const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {

@@ -45,6 +45,7 @@ export default function PlaceGallery({ place }) {
                 </div>
               ))}
           </div>
+
         </div>
       </div>
     );
@@ -80,6 +81,7 @@ export default function PlaceGallery({ place }) {
                 src={place.photos[2]}
                 alt=""
               />
+
             )}
           </div>
         </div>
