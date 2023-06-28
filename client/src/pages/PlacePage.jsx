@@ -1,9 +1,9 @@
-import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import AddressLink from "../AddressLink";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
-import AddressLink from "../AddressLink";
 import ReviewBlock from "../components/ReviewBlock";
 
 export default function PlacePage() {
@@ -29,23 +29,6 @@ export default function PlacePage() {
 
   if (!place) return "";
 
-  const toggleFavorite = async () => {
-    try {
-      if (isFavorited) {
-        const response = await axios.delete(
-          `http://localhost:4000/user/favorites/remove/${id}`
-        );
-        setIsFavorited(false);
-      } else {
-        const response = await axios.post(
-          `http://localhost:4000/user/favorites/${id}`
-        );
-        setIsFavorited(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const reviews = [
     {
       user: "John",
@@ -68,6 +51,27 @@ export default function PlacePage() {
       content: "Too good tobe true",
     },
   ];
+
+  if (!place) return "";
+
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorited) {
+        const response = await axios.delete(
+          `http://localhost:4000/user/favorites/remove/${id}`
+        );
+        setIsFavorited(false);
+      } else {
+        const response = await axios.post(
+          `http://localhost:4000/user/favorites/${id}`
+        );
+        setIsFavorited(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8 rounded-2xl ">
       <div className="flex justify-between items-center">
