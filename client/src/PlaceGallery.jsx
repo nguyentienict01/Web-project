@@ -1,10 +1,10 @@
 
-import {useState} from "react";
+import { useState } from "react";
 import Image from "./Image.jsx";
 
-export default function PlaceGallery({place}) {
+export default function PlaceGallery({ place }) {
 
-  const [showAllPhotos,setShowAllPhotos] = useState(false);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   if (showAllPhotos) {
     return (
@@ -19,9 +19,9 @@ export default function PlaceGallery({place}) {
               Close photos
             </button>
           </div>
-          {place?.photos?.length > 0 && place.photos.map(photo => (
-            <div>
-              <Image src={photo} alt=""/>
+          {place?.photos?.length > 0 && place.photos.map((photo, index) => (
+            <div key={index}>
+              <Image src={photo} alt="" />
             </div>
           ))}
         </div>
@@ -35,17 +35,17 @@ export default function PlaceGallery({place}) {
         <div>
           {place.photos?.[0] && (
             <div>
-              <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover" src={place.photos[0]} alt=""/>
+              <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover" src={place.photos[0]} alt="" />
             </div>
           )}
         </div>
         <div className="grid">
           {place.photos?.[1] && (
-            <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover" src={place.photos[1]} alt=""/>
+            <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover" src={place.photos[1]} alt="" />
           )}
           <div className="overflow-hidden">
             {place.photos?.[2] && (
-              <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover relative top-2" src={place.photos[2]} alt=""/>
+              <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover relative top-2" src={place.photos[2]} alt="" />
             )}
           </div>
         </div>
