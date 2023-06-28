@@ -29,7 +29,9 @@ input:not([type="checkbox"]) {
 }
 input[type="text"],
 input[type="number"],
-input[type="tel"] {
+input[type="tel"],
+input[type="email"],
+input[type="password"] {
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   padding: 4px 12px;
@@ -41,7 +43,11 @@ input[type="text"]:focus,
 input[type="number"]:hover,
 input[type="number"]:focus,
 input[type="tel"]:hover,
-input[type="tel"]:focus {
+input[type="tel"]:focus,
+input[type="email"]:hover,
+input[type="email"]:focus,
+input[type="password"]:hover,
+input[type="password"]:focus {
   border: 1px solid rgb(75 85 99);
 }
 button {
