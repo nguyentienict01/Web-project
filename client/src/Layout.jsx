@@ -9,7 +9,7 @@ export default function Layout() {
         <div className="top-0 max-w-4xl mx-auto z-30">
           <Header />
         </div>
-        <div className="px-8 flex flex-col max-w-4xl mx-auto flex-grow">
+        <div className="px-8 flex flex-col max-w-6xl mx-auto flex-grow">
           <Outlet />
         </div>
         <div className="bottom-0">

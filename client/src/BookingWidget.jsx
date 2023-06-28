@@ -29,18 +29,31 @@ export default function BookingWidget({ place }) {
 
   async function bookThisPlace(e) {
     e.preventDefault();
-    const response = await axios.post("http://localhost:4000/bookings", {
-      checkIn,
-      checkOut,
-      numberOfGuests,
-      name,
-      phone,
-      place: place._id,
-      price: numberOfNights * place.price,
-    });
-    const bookingId = response.data._id;
-    setRedirect(`/account/bookings/${bookingId}`);
+    if (numberOfGuests > place.maxGuests) {
+      alert(`The max number of guests for this place is ${place.maxGuests}`);
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:4000/bookings", {
+        checkIn,
+        checkOut,
+        numberOfGuests,
+        name,
+        phone,
+        place: place._id,
+        price: numberOfNights * place.price,
+      });
+      const bookingId = response.data._id;
+      setRedirect(`/account/bookings/${bookingId}`);
+    } catch (error) {
+      if (error.response && error.response.data.message === "No available room") {
+        alert("No available room. Please choose another time.");
+      } else {
+        console.log(error);
+      }
+    }
   }
+  
 
   if (redirect) {
     return <Navigate to={redirect} />;
