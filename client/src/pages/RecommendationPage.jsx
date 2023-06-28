@@ -37,8 +37,12 @@ function RecommendationPage() {
       <PerkSlider activePerk={activePerk} setActivePerk={setActivePerk} />
       <div className="flex flex-col divide-y">
         <div className="flex flex-col w-full gap-5">
-          <h2 className="text-2xl font-semibold">By Ratings</h2>
-          <PlaceSlider places={placesByPerk} />
+          <h2 className="text-2xl font-semibold">All Places</h2>
+          {placesByPerk?.length ? (
+            <PlaceSlider places={placesByPerk} />
+          ) : (
+            <span className="text-md mb-10"> No places available</span>
+          )}{" "}
         </div>
         <div className="flex flex-col w-full gap-5 pt-5">
           <h2 className="text-2xl font-semibold">Beach Places</h2>
