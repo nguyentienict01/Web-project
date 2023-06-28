@@ -1,9 +1,8 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import UserPopover from "./components/UserPopover.jsx";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import UserPopover from "./components/UserPopover.jsx";
 
 export default function Header() {
-  const location = useLocation();
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
   const handleInputChange = (e) => {
@@ -34,7 +33,7 @@ export default function Header() {
         </svg>
         <span className="font-bold text-xl">Booking</span>
       </Link>
-      {location?.pathname === "/recommendations" && (
+      {
         <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 hover:shadow-md shadow-sm transition-all  shadow-gray-300">
           <input
             placeholder="Enter a position"
@@ -60,7 +59,7 @@ export default function Header() {
             </svg>
           </button>
         </div>
-      )}
+      }
       <UserPopover />
     </header>
   );

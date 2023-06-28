@@ -19,12 +19,51 @@ function RecommendationPage() {
       ? places?.filter((place) => place.perks?.includes(activePerk))
       : places;
   }, [places, activePerk]);
+
+  const beachPlaces = useMemo(() => {
+    return placesByPerk?.filter((place) => place.type === "beach");
+  }, [placesByPerk]);
+
+  const villaPlaces = useMemo(() => {
+    return placesByPerk?.filter((place) => place.type === "villa");
+  }, [placesByPerk]);
+
+  const resortPlaces = useMemo(() => {
+    return placesByPerk?.filter((place) => place.type === "resort");
+  }, [placesByPerk]);
+
   return (
     <div className="flex flex-col py-10 gap-4">
       <PerkSlider activePerk={activePerk} setActivePerk={setActivePerk} />
-      <div className="flex flex-col w-full gap-5">
-        <h2 className="text-2xl font-semibold">By Ratings</h2>
-        <PlaceSlider places={placesByPerk} />
+      <div className="flex flex-col divide-y">
+        <div className="flex flex-col w-full gap-5">
+          <h2 className="text-2xl font-semibold">By Ratings</h2>
+          <PlaceSlider places={placesByPerk} />
+        </div>
+        <div className="flex flex-col w-full gap-5 pt-5">
+          <h2 className="text-2xl font-semibold">Beach Places</h2>
+          {beachPlaces?.length ? (
+            <PlaceSlider places={beachPlaces} />
+          ) : (
+            <span className="text-md mb-10"> No beach places available</span>
+          )}
+        </div>
+        <div className="flex flex-col w-full gap-5 pt-5">
+          <h2 className="text-2xl font-semibold">Villa Places</h2>
+          {villaPlaces?.length ? (
+            <PlaceSlider places={villaPlaces} />
+          ) : (
+            <span className="text-md mb-10"> No villa places available</span>
+          )}
+        </div>
+        <div className="flex flex-col w-full gap-5 pt-5">
+          <h2 className="text-2xl font-semibold">Resort Places</h2>
+          {resortPlaces?.length ? (
+            <PlaceSlider places={resortPlaces} />
+          ) : (
+            <span className="text-md mb-10"> No resort places available</span>
+          )}
+        </div>
       </div>
     </div>
   );
