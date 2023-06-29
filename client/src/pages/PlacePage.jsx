@@ -1,26 +1,48 @@
-import {Link, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
 import AddressLink from "../AddressLink";
+import ReviewBlock from "../components/ReviewBlock";
 
 export default function PlacePage() {
-  const {id} = useParams();
-  const [place,setPlace] = useState(null);
+  const { id } = useParams();
+  const [place, setPlace] = useState(null);
   useEffect(() => {
     if (!id) {
       return;
     }
-    axios.get(`http://localhost:4000/places/id/${id}`).then(response => {
+    axios.get(`http://localhost:4000/places/id/${id}`).then((response) => {
       setPlace(response.data);
     });
   }, [id]);
 
-  if (!place) return '';
+  if (!place) return "";
 
+  const reviews = [
+    {
+      user: "John",
+      rating: "4.5",
+      content: "Too good tobe true",
+    },
 
-
+    {
+      user: "John",
+      rating: "3",
+      content: "Too good tobe true",
+    },
+    {
+      user: "John",
+      rating: "4.5",
+      content: "Too good tobe true",
+    },
+    {
+      user: "John",
+      rating: "2",
+      content: "Too good tobe true",
+    },
+  ];
   return (
     <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8 rounded-2xl ">
       <h1 className="text-3xl">{place.title}</h1>
@@ -32,8 +54,10 @@ export default function PlacePage() {
             <h2 className="font-semibold text-2xl">Description</h2>
             {place.description}
           </div>
-          Check-in: {place.checkIn}<br />
-          Check-out: {place.checkOut}<br />
+          Check-in: {place.checkIn}
+          <br />
+          Check-out: {place.checkOut}
+          <br />
           Max number of guests: {place.maxGuests}
         </div>
         <div>
@@ -44,7 +68,18 @@ export default function PlacePage() {
         <div>
           <h2 className="font-semibold text-2xl">Extra info</h2>
         </div>
-        <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">{place.extraInfo}</div>
+        <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">
+          {place.extraInfo}
+        </div>
+      </div>
+
+      <div className="flex flex-col bg-white -mx-8 px-8 py-8 border-t">
+        <h2 className="font-semibold text-2xl mb-8">Reviews</h2>
+        <div className="flex flex-col">
+          {reviews?.map((review, index) => {
+            return <ReviewBlock review={review} key={index} />;
+          })}
+        </div>
       </div>
     </div>
   );
