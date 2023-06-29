@@ -91,7 +91,7 @@ export default function UserPopover() {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute right-0 z-10 mt-3 w-[240px] transform px-4 sm:px-0 lg:max-w-3xl">
+        <Popover.Panel className="absolute right-0 z-10 mt-3 w-[240px] transform px-4 sm:px-0 lg:max-w-3xl bg-white">
           {({ close }) => (
             <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
               {(user ? userItems : guestItems)?.map((item, index) => {
