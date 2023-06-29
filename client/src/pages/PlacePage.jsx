@@ -9,7 +9,6 @@ import ReviewBlock from "../components/ReviewBlock";
 export default function PlacePage() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
-
   const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
@@ -73,6 +72,7 @@ export default function PlacePage() {
     }
   };
 
+  
   return (
     <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8 rounded-2xl ">
       <div className="flex justify-between items-center">

@@ -33,7 +33,6 @@ function App() {
           <Route path="/search" element={<PlaceSearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
           <Route path="/account/favorites" element={<FavoritesPage />} />
           <Route path="/account/places" element={<PlacesPage />} />
           <Route path="/account/places/new" element={<PlacesFormPage />} />
