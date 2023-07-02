@@ -1,4 +1,9 @@
+import { perkList } from "./common/constants";
+
 export default function Perks({ selected, onChange }) {
+  const filteredPerkList = perkList.filter(
+    (item) => !["all"].includes(item.value)
+  );
   function handleCbClick(ev) {
     const { checked, name } = ev.target;
     if (checked) {
@@ -9,7 +14,17 @@ export default function Perks({ selected, onChange }) {
   }
   return (
     <>
-      <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
+      {
+        filteredPerkList?.map((perk, index) => {
+          return <label key={index} className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
+            <input type="checkbox" checked={selected.includes(perk.value)} name={perk.value} onChange={handleCbClick} />
+            <perk.icon />
+            <span>{perk.name}</span>
+          </label>
+        })
+      }
+
+      {/* <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
         <input type="checkbox" checked={selected.includes('wifi')} name="wifi" onChange={handleCbClick} />
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z" />
@@ -94,7 +109,7 @@ export default function Perks({ selected, onChange }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
         </svg>
         <span>Near Mall</span>
-      </label>
+      </label> */}
     </>
   );
 }

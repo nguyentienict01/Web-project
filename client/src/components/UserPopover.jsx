@@ -20,7 +20,10 @@ const userItems = [
     label: "Notifications",
     to: "/account/notifications",
   },
-  {},
+  {
+    label: "Favorite Places",
+    to: "/account/favorites",
+  },
   {
     label: "Logout",
     to: "",

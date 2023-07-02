@@ -2,13 +2,16 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { Controller } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { perkList } from "../common/constatns";
+import { perkList } from "../common/constants";
 import { classNames } from "../common/helpers";
 
 export default function PerkSlider({ activePerk, setActivePerk }) {
   const [swiperController, setSwiperController] = useState();
   const [canNext, setCanNext] = useState(false);
   const [canPrev, setCanPrev] = useState(false);
+  const filteredPerkList = perkList.filter(
+    (item) => !["resort", "villa", "beach"].includes(item.value)
+  );
   useEffect(() => {
     const handleResize = () => {
       if (swiperController) {
@@ -48,7 +51,7 @@ export default function PerkSlider({ activePerk, setActivePerk }) {
           setCanNext(!event?.isEnd);
         }}
       >
-        {perkList?.map((content, index) => {
+        {filteredPerkList?.map((content, index) => {
           return (
             <SwiperSlide key={index}>
               <div
@@ -58,7 +61,7 @@ export default function PerkSlider({ activePerk, setActivePerk }) {
                     ? "!border-black !border-b-2 !opacity-100"
                     : ""
                 )}
-                onClick={() => setActivePerk(content.value)}
+                onClick={() => setActivePerk(content?.value)}
               >
                 <div
                   className={
