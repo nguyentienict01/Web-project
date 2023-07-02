@@ -24,7 +24,24 @@ export default function BookingPage() {
   const deleteBooking = () => {
     axios.delete(`http://localhost:4000/bookings/delete/${id}`)
       .then(response => {
+        createNotification(booking.place.owner, booking.name, id, booking.place.title);
         navigate('/account/bookings');
+      });
+  }
+
+  const createNotification = (userId, name, bookingId, placeTitle) => {
+    axios.post("http://localhost:4000/notiBooking", {
+      user: userId,
+      name: name,
+      booking: bookingId,
+      place: placeTitle,
+      content: "Delete Booking"
+    })
+      .then(response => {
+        console.log("Thông báo đã được tạo thành công");
+      })
+      .catch(error => {
+        console.error("Lỗi khi tạo thông báo:", error);
       });
   }
 

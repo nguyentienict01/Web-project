@@ -9,6 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< Updated upstream
+=======
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "all": "^0.0.0",
+>>>>>>> Stashed changes
     "autoprefixer": "^10.4.13",
     "axios": "^1.2.2",
     "date-fns": "^2.29.3",

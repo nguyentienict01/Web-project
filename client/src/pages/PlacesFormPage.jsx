@@ -18,12 +18,14 @@ export default function PlacesFormPage() {
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
   const [redirect, setRedirect] = useState(false);
+  console.log(id);
   useEffect(() => {
     if (!id) {
       return;
     }
-    axios.get('http://localhost:4000/places/' + id).then(response => {
+    axios.get('http://localhost:4000/places/id/' + id).then(response => {
       const { data } = response;
+      console.log(data)
       setTitle(data.title);
       setAddress(data.address);
       setAddedPhotos(data.photos);
@@ -132,8 +134,8 @@ export default function PlacesFormPage() {
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', margin: '16px 0px'}}>
-          <button className="secondary my-4 mx-16">Save</button>
-          {id && <button type="button" onClick={deletePlace} className="primary my-4 mx-16">Delete</button>}
+          <button className="secondary my-4 mx-16 text-center">{id ? "Edit" : "Save"}</button>
+          {id && <button type="button" onClick={deletePlace} className="primary my-4 mx-16 text-center">Delete</button>}
         </div>
       </form>
     </div>
