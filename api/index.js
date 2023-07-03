@@ -58,6 +58,15 @@ app.get('/test', (req, res) => {
   res.json('test ok');
 });
 
+app.get("/places/villa", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const placesWithVilla = await Place.find({
+    perks: { $in: ["villa"] },
+  });
+  res.json(placesWithVilla);
+  
+});
+
 app.post('/register', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { name, email, password } = req.body;

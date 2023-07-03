@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node index.js",
-    "start:dev": "SET NODE_ENV=development&&nodemon index.js",
+    "start:dev": "set NODE_ENV=development&&nodemon index.js",
     "start:prod": "set NODE_ENV=production&&nodemon index.js",
     "debug": "ndb node index.js",
     "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",

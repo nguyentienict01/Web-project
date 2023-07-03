@@ -132,8 +132,8 @@ export default function PlacesFormPage() {
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', margin: '16px 0px'}}>
-          <button className="secondary my-4 mx-16">Save</button>
-          {id && <button type="button" onClick={deletePlace} className="primary my-4 mx-16">Delete</button>}
+          <button className="secondary my-4 mx-16 text-center">Save</button>
+          {id && <button type="button" onClick={deletePlace} className="primary my-4 mx-16 text-center">Delete</button>}
         </div>
       </form>
     </div>

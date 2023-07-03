@@ -21,15 +21,15 @@ function RecommendationPage() {
   }, [places, activePerk]);
 
   const beachPlaces = useMemo(() => {
-    return placesByPerk?.filter((place) => place.type === "beach");
+    return placesByPerk?.filter((place) => place.perks?.includes("beach"));
   }, [placesByPerk]);
 
   const villaPlaces = useMemo(() => {
-    return placesByPerk?.filter((place) => place.type === "villa");
+    return placesByPerk?.filter((place) => place.perks?.includes("villa"));
   }, [placesByPerk]);
 
   const resortPlaces = useMemo(() => {
-    return placesByPerk?.filter((place) => place.type === "resort");
+    return placesByPerk?.filter((place) => place.perks?.includes("resort"));
   }, [placesByPerk]);
 
   return (
