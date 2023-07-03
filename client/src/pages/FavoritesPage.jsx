@@ -24,6 +24,7 @@ export default function FavoritesPage() {
             <div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
               <PlaceImg place={place} />
             </div>
+            
             <div className="grow-0 shrink">
               <h2 className="text-xl">{place.title}</h2>
               <p className="text-sm mt-2">{place.description}</p>
