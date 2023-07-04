@@ -16,6 +16,7 @@ const pathModule = require("path");
 const mime = require("mime-types");
 
 require("dotenv").config();
+
 const app = express();
 
 mongoose.set("strictQuery", true);

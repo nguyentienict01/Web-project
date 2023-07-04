@@ -65,3 +65,18 @@ button.secondary{
     background-color: #6fe644;
     @apply bg-green-500 p-2 w-full text-white rounded-2xl;
 }
+
+.img-magnifier-container {
+  position: relative;
+}
+
+.magnifier-img {
+  width: auto;
+  height: 80vh;
+}
+
+.magnifier-image {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #fff;
+}

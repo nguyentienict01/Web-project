@@ -94,7 +94,7 @@ function PlaceSlider({ places = [] }) {
                       <span className="text-base flex items-center">
                         <StarIcon className="w-4 h-4 mr-1" />{" "}
                         <span className="text-sm">
-                          {place.rating?.toFixed(2) || "0.00"}
+                          {Number(place.rating)?.toFixed(2) || "0.00"}
                         </span>
                       </span>
                     </div>
