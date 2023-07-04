@@ -10,6 +10,10 @@ export default function PlacePage() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [reviewContent, setReviewContent] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [activeStars, setActiveStars] = useState(0);
 
   useEffect(() => {
     if (!id) {
@@ -25,32 +29,10 @@ export default function PlacePage() {
         favoritePlaces.some((favoritePlace) => favoritePlace._id === id)
       );
     });
+    axios.get(`http://localhost:4000/reviews/place/${id}`).then((response) => {
+      setReviews(response.data);
+    });
   }, [id]);
-
-  if (!place) return "";
-
-  const reviews = [
-    {
-      user: "John",
-      rating: "4.5",
-      content: "Too good tobe true",
-    },
-    {
-      user: "John",
-      rating: "3",
-      content: "Too good tobe true",
-    },
-    {
-      user: "John",
-      rating: "4.5",
-      content: "Too good tobe true",
-    },
-    {
-      user: "John",
-      rating: "2",
-      content: "Too good tobe true",
-    },
-  ];
 
   if (!place) return "";
 
@@ -72,7 +54,67 @@ export default function PlacePage() {
     }
   };
 
+  const handleReviewChange = (event) => {
+    setReviewContent(event.target.value);
+  };
+
+  const handleRatingChange = (event) => {
+    setRating(parseInt(event.target.value));
+  };
+
+  const handleRatingClick = (rating) => {
+    setActiveStars(rating);
+    setRating(rating);
+  };
+
+  const renderStars = () => {
+    const stars = [];
   
+    for (let i = 1; i <= 5; i++) {
+      const isActive = i <= activeStars;
+      const starColor = isActive ? "#FFCB00" : "currentColor";
+  
+      stars.push(
+        <svg
+          key={i}
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="inline-block mr-1 text-gray-200 cursor-pointer"
+          onClick={() => handleRatingClick(i)}
+        >
+          <path
+            d="M20 7.91677H12.4167L10 0.416763L7.58333 7.91677H0L6.18335 12.3168L3.81668 19.5834L10 15.0834L16.1834 19.5834L13.8167 12.3168L20 7.91677Z"
+            fill={starColor}
+          ></path>
+        </svg>
+      );
+    }
+  
+    return stars;
+  };
+  
+  const handleSubmitReview = async () => {
+    try {
+      const response = await axios.post(`http://localhost:4000/reviews/place/${id}`, {
+        rating: rating,
+        content: reviewContent,
+      }).then((response) => {
+        axios.get(`http://localhost:4000/reviews/place/${id}`)
+          .then((response) => {
+            setReviews(response.data);
+          });
+      });
+      setReviewContent("");
+      setActiveStars(0);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
+  };
+  
+
   return (
     <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8 rounded-2xl ">
       <div className="flex justify-between items-center">
@@ -117,6 +159,28 @@ export default function PlacePage() {
         </div>
         <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">
           {place.extraInfo}
+        </div>
+      </div>
+
+      <div className="mt-8 pb-4">
+        <textarea
+          className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none"
+          rows="4"
+          placeholder="Write a review..."
+          value={reviewContent}
+          onChange={handleReviewChange}
+        ></textarea>
+        <div className="flex">
+          <label>Rating:</label>
+          <div className="ml-4">{renderStars()}</div>
+        </div>
+        <div className="" style={{marginLeft: "89%"}}>
+          <button
+            className="px-4 py-2 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            onClick={handleSubmitReview}
+          >
+            Submit Review
+          </button>
         </div>
       </div>
 

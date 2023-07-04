@@ -26,10 +26,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<RecommendationPage />} />
           <Route path="/recommendations" element={<RecommendationPage />} />
-          <Route
-            path="/account/notifications"
-            element={<NotificationsPage />}
-          />
+          <Route path="/account/notifications" element={<NotificationsPage />} />
           <Route path="/search" element={<PlaceSearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -37,7 +34,6 @@ function App() {
           <Route path="/account/places" element={<PlacesPage />} />
           <Route path="/account/places/new" element={<PlacesFormPage />} />
           <Route path="/account/places/:id" element={<PlacesFormPage />} />
-          {/* <Route path="/account/places/:id" element={<PlaceEditFormPage />} /> */}
           <Route path="/place/id/:id" element={<PlacePage />} />
           <Route path="/account/bookings" element={<BookingsPage />} />
           <Route path="/account/bookings/:id" element={<BookingPage />} />
