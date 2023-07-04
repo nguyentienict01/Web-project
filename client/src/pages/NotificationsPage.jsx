@@ -49,12 +49,6 @@ function NotificationsPage() {
                   <div className="font-medium text-red-500">Content: {notification.content}</div>
                 </div>
                 <div>
-                  {notification.content === "booking" || notification.content === "Booking" ? (
-                    <div>
-                      <button className="bg-green-500 text-white font-medium px-4 py-2 rounded-md mt-2 mr-6" onClick={() => handleAccept(notification._id)}>Accept</button>
-                      <button className="bg-red-500 text-white font-medium px-4 py-2 rounded-md mt-2">Decline</button>
-                    </div>
-                  ) : null}
                   <div className="text-gray-500 text-center">{formatDate(notification.date)}</div>
                 </div>
               </div>
