@@ -6,10 +6,8 @@ const jwt = require("jsonwebtoken");
 const User = require("./models/User.js");
 const Place = require("./models/Place.js");
 const Booking = require("./models/Booking.js");
-<<<<<<< Updated upstream
-=======
 const Notification = require("./models/Noti");
->>>>>>> Stashed changes
+const Review = require("./models/Review")
 const cookieParser = require("cookie-parser");
 const imageDownloader = require("image-downloader");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
@@ -17,6 +15,7 @@ const multer = require("multer");
 const fs = require("fs-extra");
 const pathModule = require("path");
 const mime = require("mime-types");
+const ReviewModel = require("./models/Review.js");
 
 require("dotenv").config();
 const app = express();
@@ -172,24 +171,18 @@ app.post("/places", (req, res) => {
       address,
       photos: addedPhotos,
       description,
-<<<<<<< Updated upstream
-      perks,
-=======
       perks: [...perks, "all"],
->>>>>>> Stashed changes
       extraInfo,
       checkIn,
       checkOut,
       maxGuests,
+      rating: 0
     });
     res.json(placeDoc);
   });
 });
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 app.get("/user-places", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
@@ -383,36 +376,24 @@ app.delete("/places/delete/:id", async (req, res) => {
 app.post("/bookings", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
-<<<<<<< Updated upstream
-  const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
-    req.body;
-=======
   const { place, checkIn, checkOut, numberOfGuests, name, phone, price } = req.body;
 
-  // Kiểm tra ngày check-in phải trước ngày check-out
   if (new Date(checkIn) >= new Date(checkOut)) {
     res.status(400).json({ message: "Invalid time" });
     return;
   }
 
->>>>>>> Stashed changes
   const existingBookings = await Booking.find({
     place: place,
     checkIn: { $lt: new Date(checkOut) },
     checkOut: { $gt: new Date(checkIn) },
   });
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
   if (existingBookings.length > 0) {
     res.status(400).json({ message: "No available room" });
     return;
   }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
   Booking.create({
     place,
     checkIn,
@@ -431,10 +412,7 @@ app.post("/bookings", async (req, res) => {
     });
 });
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 app.delete("/bookings/delete/:id", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { id } = req.params;
@@ -467,11 +445,9 @@ app.get("/bookings", async (req, res) => {
   res.json(await Booking.find({ user: userData.id }).populate("place"));
 });
 
-<<<<<<< Updated upstream
-=======
 app.post("/notiBooking", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const { user, name, booking, place, content } = req.body;
+  const { user, name, booking, place, checkIn, checkOut, content } = req.body;
   console.log(req.body)
 
   const notification = {
@@ -479,6 +455,8 @@ app.post("/notiBooking", (req, res) => {
     userAct: name,
     booking: booking,
     place: place,
+    checkIn: checkIn,
+    checkOut: checkOut,
     content: content
   };
 
@@ -517,6 +495,48 @@ app.get("/notifications", (req, res) => {
   });
 });
 
+app.post('/reviews/place/:id', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { token } = req.cookies;
+  const { id } = req.params;
+  const { rating, content } = req.body;
 
->>>>>>> Stashed changes
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+
+    const reviewDoc = await Review.create({
+      user: userData.id,
+      place: id,
+      rating,
+      content
+    });
+
+    // Calculate the average rating for the place
+    const place = await Place.findById(id);
+    let updatedRating = rating;
+
+    if (place.rating !== 0) {
+      updatedRating = (place.rating + rating) / 2;
+    }
+
+    // Update the place's rating
+    place.rating = updatedRating;
+    console.log(updatedRating)
+    await place.save();
+
+    res.json(reviewDoc);
+  });
+});
+
+
+app.get('/reviews/place/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reviews = await Review.find({ place: id }).populate('user');
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy đánh giá.' });
+  }
+});
+
 app.listen(4000);

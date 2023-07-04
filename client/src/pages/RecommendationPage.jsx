@@ -19,7 +19,7 @@ function RecommendationPage() {
       ? places?.filter((place) => place.perks?.includes(activePerk))
       : places;
   }, [places, activePerk]);
-
+console.log(placesByPerk)
   const beachPlaces = useMemo(() => {
     return placesByPerk?.filter((place) => place.perks.includes("beach"));
   }, [placesByPerk]);

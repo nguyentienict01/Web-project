@@ -18,6 +18,7 @@ function PlaceSlider({ places = [] }) {
   const handleClickPlaceCard = (id) => {
     navigate("/place/id/" + id);
   };
+  //console.log(places)
   useEffect(() => {
     const handleResize = () => {
       if (swiperController) {
@@ -65,7 +66,7 @@ function PlaceSlider({ places = [] }) {
       >
         {places?.map((place, index) => {
           return (
-            <SwiperSlide key={index} className="h-auto">
+            <SwiperSlide key={place._id} className="h-auto">
               <div
                 className={classNames(
                   "flex w-full h-full justify-center transition-all cursor-pointer"
@@ -78,10 +79,8 @@ function PlaceSlider({ places = [] }) {
                   }
                 >
                   <Image
-                    className={
-                      "w-full aspect-square object-cover rounded-[12px]"
-                    }
-                    src={place.photos?.[0] || ""}
+                    className={"w-full aspect-square object-cover rounded-[12px]"}
+                    src={place.photos[0] || ""}
                     alt={place.title || ""}
                     width={100}
                     height={100}
@@ -89,12 +88,12 @@ function PlaceSlider({ places = [] }) {
                   <div className="flex flex-col gap-[2px] w-full flex-1">
                     <div className="flex justify-between gap-1">
                       <h4 className="text-base font-semibold line-clamp-1">
-                        {place.title}, {place.address}
+                        {place.title}
                       </h4>
                       <span className="text-base flex items-center">
-                        <StarIcon className="w-4 h-4 mr-1" />{" "}
+                        <StarIcon className="w-4 h-4 mr-1" />
                         <span className="text-sm">
-                          {place.rating?.toFixed(2) || "0.00"}
+                          {place.rating?.toFixed(2) !== "0.00" ? place.rating?.toFixed(2) : "No rating"}
                         </span>
                       </span>
                     </div>
