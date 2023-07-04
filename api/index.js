@@ -195,16 +195,24 @@ app.get("/user-places", (req, res) => {
 app.get("/user-favorites", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    const { id } = userData;
-    const user = await User.findById(id);
-    if (user && user.favorites) {
-      const favoritePlaces = await Place.find({ _id: { $in: user.favorites } });
-      res.json(favoritePlaces);
-    } else {
-      res.json([]);
-    }
-  });
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+
+      const { id } = userData;
+      const user = await User.findById(id);
+
+      if (user && user.favorites) {
+        const favoritePlaces = await Place.find({ _id: { $in: user.favorites } });
+        res.json(favoritePlaces);
+      } else {
+        res.json([]);
+      }
+    });
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
+  }
 });
 
 app.post("/user/favorites/:id", async (req, res) => {
@@ -375,7 +383,9 @@ app.delete("/places/delete/:id", async (req, res) => {
 
 app.post("/bookings", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const userData = await getUserDataFromReq(req);
+  const { token } = req.cookies;
+  if(token) {
+    const userData = await getUserDataFromReq(req);
   const { place, checkIn, checkOut, numberOfGuests, name, phone, price } = req.body;
 
   if (new Date(checkIn) >= new Date(checkOut)) {
@@ -410,8 +420,8 @@ app.post("/bookings", async (req, res) => {
     .catch((err) => {
       throw err;
     });
+  }
 });
-
 
 app.delete("/bookings/delete/:id", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
@@ -501,31 +511,33 @@ app.post('/reviews/place/:id', async (req, res) => {
   const { id } = req.params;
   const { rating, content } = req.body;
 
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) throw err;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
 
-    const reviewDoc = await Review.create({
-      user: userData.id,
-      place: id,
-      rating,
-      content
+      const reviewDoc = await Review.create({
+        user: userData.id,
+        place: id,
+        rating,
+        content
+      });
+
+      // Calculate the average rating for the place
+      const place = await Place.findById(id);
+      let updatedRating = rating;
+
+      if (place.rating !== 0) {
+        updatedRating = (place.rating + rating) / 2;
+      }
+
+      // Update the place's rating
+      place.rating = updatedRating;
+      console.log(updatedRating)
+      await place.save();
+
+      res.json(reviewDoc);
     });
-
-    // Calculate the average rating for the place
-    const place = await Place.findById(id);
-    let updatedRating = rating;
-
-    if (place.rating !== 0) {
-      updatedRating = (place.rating + rating) / 2;
-    }
-
-    // Update the place's rating
-    place.rating = updatedRating;
-    console.log(updatedRating)
-    await place.save();
-
-    res.json(reviewDoc);
-  });
+  }
 });
 
 
