@@ -1,7 +1,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import { useContext, Fragment } from "react";
 import { UserContext } from "../UserContext.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const linkClass =
@@ -30,16 +30,7 @@ const userItems = [
   },
 ];
 
-const guestItems = [
-  {
-    label: "Login",
-    to: "/login",
-  },
-  {
-    label: "Register",
-    to: "/register",
-  },
-];
+
 
 export default function UserPopover() {
   const { user, setUser } = useContext(UserContext);
@@ -49,6 +40,20 @@ export default function UserPopover() {
     setUser(null);
     navigate("/");
   }
+
+  const location = useLocation();
+  console.log(location)
+
+  const guestItems = [
+    {
+      label: "Login",
+      to: `/login?redirect=${location.pathname}`,
+    },
+    {
+      label: "Register",
+      to: "/register",
+    },
+  ];
 
   return (
     <Popover className="relative">

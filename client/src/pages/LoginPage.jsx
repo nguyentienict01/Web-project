@@ -1,13 +1,22 @@
-import { Link, Navigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { useContext, useMemo, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../UserContext.jsx";
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return  useMemo(() => new URLSearchParams(search.slice(1)), [search]);
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const { setUser } = useContext(UserContext);
+  
+  const { search } = useLocation();
+  
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
     try {
@@ -24,7 +33,8 @@ export default function LoginPage() {
   }
 
   if (redirect) {
-    return <Navigate to={"/"} />;
+    const redirect = search?.split('=')?.[1];
+    return <Navigate to={redirect || '/'} />;
   }
 
   return (

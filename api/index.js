@@ -18,6 +18,7 @@ const mime = require("mime-types");
 const ReviewModel = require("./models/Review.js");
 
 require("dotenv").config();
+
 const app = express();
 
 mongoose.set("strictQuery", true);
@@ -181,7 +182,6 @@ app.post("/places", (req, res) => {
     res.json(placeDoc);
   });
 });
-
 
 app.get("/user-places", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
@@ -398,12 +398,10 @@ app.post("/bookings", async (req, res) => {
     checkIn: { $lt: new Date(checkOut) },
     checkOut: { $gt: new Date(checkIn) },
   });
-
   if (existingBookings.length > 0) {
     res.status(400).json({ message: "No available room" });
     return;
   }
-
   Booking.create({
     place,
     checkIn,

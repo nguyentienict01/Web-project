@@ -1,13 +1,15 @@
 import { useState } from "react";
 import Image from "./Image.jsx";
+import ImageMagnifier from "./components/ImageMagnifier.jsx";
+// import ImageMagnifier from "./ImageMagnifier.jsx";
 
 export default function PlaceGallery({ place }) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   if (showAllPhotos) {
     return (
-      <div className="absolute inset-0 bg-black text-white min-h-screen">
-        <div className="bg-black p-8 grid gap-4">
+      <div className="absolute inset-0 bg-black text-white min-h-screen top-50">
+        <div className="bg-black p-8 grid gap-4 static">
           <div>
             <h2 className="text-3xl mr-48">Photos of {place.title}</h2>
             <button
@@ -26,7 +28,7 @@ export default function PlaceGallery({ place }) {
                   clipRule="evenodd"
                 />
               </svg>
-              Close photos
+              Close
             </button>
           </div>
           <div className="flex flex-wrap w-full max-w-screen-lg gap-3 mx-auto">
@@ -39,7 +41,7 @@ export default function PlaceGallery({ place }) {
                     (index % 3 === 0 ? "basis-[100%]" : "flex-1")
                   }
                 >
-                  <Image src={photo} alt="" className="w-full object-cover" />
+                  <ImageMagnifier src={photo} />
                 </div>
               ))}
           </div>

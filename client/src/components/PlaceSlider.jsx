@@ -64,7 +64,7 @@ function PlaceSlider({ places = [] }) {
         }}
         wrapperClass="items-stretch pb-[40px]"
       >
-        {places?.map((place, index) => {
+        {places?.map((place) => {
           return (
             <SwiperSlide key={place._id} className="h-auto">
               <div
@@ -93,7 +93,7 @@ function PlaceSlider({ places = [] }) {
                       <span className="text-base flex items-center">
                         <StarIcon className="w-4 h-4 mr-1" />
                         <span className="text-sm">
-                          {place.rating?.toFixed(2) !== "0.00" ? place.rating?.toFixed(2) : "No rating"}
+                          {Number(place.rating)?.toFixed(2) === "0.00" ? 'No rating' : Number(place.rating)?.toFixed(2)}
                         </span>
                       </span>
                     </div>

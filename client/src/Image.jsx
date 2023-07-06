@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 export default function Image({src,...rest}) {
- const inputSrc = src && src.includes('https://')
+  console.log(src);
+ const inputSrc = src && String (src).includes('https://')
     ? src
     : 'http://localhost:4000/uploads/'+src;
 
