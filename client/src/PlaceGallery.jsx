@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "./Image.jsx";
-import ImageMagnifier from "./ImageMagnifier.jsx";
+import ImageMagnifier from "./components/ImageMagnifier.jsx";
+// import ImageMagnifier from "./ImageMagnifier.jsx";
 
 export default function PlaceGallery({ place }) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -40,7 +41,7 @@ export default function PlaceGallery({ place }) {
                     (index % 3 === 0 ? "basis-[100%]" : "flex-1")
                   }
                 >
-                  <ImageMagnifier photo={photo} />
+                  <ImageMagnifier src={photo} />
                 </div>
               ))}
           </div>

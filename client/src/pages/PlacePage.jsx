@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddressLink from "../AddressLink";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
 import ReviewBlock from "../components/ReviewBlock";
+import { UserContext } from "../UserContext";
 
 export default function PlacePage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function PlacePage() {
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [activeStars, setActiveStars] = useState(0);
+  const {user} = useContext(UserContext)
 
   useEffect(() => {
     if (!id) {
@@ -162,7 +164,7 @@ export default function PlacePage() {
         </div>
       </div>
 
-      <div className="mt-8 pb-4">
+     {user && <div className="mt-8 pb-4">
         <textarea
           className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none"
           rows="4"
@@ -182,7 +184,7 @@ export default function PlacePage() {
             Submit Review
           </button>
         </div>
-      </div>
+      </div>}
 
       <div className="flex flex-col bg-white -mx-8 px-8 py-8 border-t">
         <h2 className="font-semibold text-2xl mb-8">Reviews</h2>
