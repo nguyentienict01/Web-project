@@ -7,6 +7,7 @@ const User = require("./models/User.js");
 const Place = require("./models/Place.js");
 const Booking = require("./models/Booking.js");
 const Notification = require("./models/Noti");
+const Review = require("./models/Review")
 const cookieParser = require("cookie-parser");
 const imageDownloader = require("image-downloader");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
@@ -14,6 +15,7 @@ const multer = require("multer");
 const fs = require("fs-extra");
 const pathModule = require("path");
 const mime = require("mime-types");
+const ReviewModel = require("./models/Review.js");
 
 require("dotenv").config();
 
@@ -175,6 +177,7 @@ app.post("/places", (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
+      rating: 0
     });
     res.json(placeDoc);
   });
@@ -192,16 +195,24 @@ app.get("/user-places", (req, res) => {
 app.get("/user-favorites", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    const { id } = userData;
-    const user = await User.findById(id);
-    if (user && user.favorites) {
-      const favoritePlaces = await Place.find({ _id: { $in: user.favorites } });
-      res.json(favoritePlaces);
-    } else {
-      res.json([]);
-    }
-  });
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+
+      const { id } = userData;
+      const user = await User.findById(id);
+
+      if (user && user.favorites) {
+        const favoritePlaces = await Place.find({ _id: { $in: user.favorites } });
+        res.json(favoritePlaces);
+      } else {
+        res.json([]);
+      }
+    });
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
+  }
 });
 
 app.post("/user/favorites/:id", async (req, res) => {
@@ -372,10 +383,11 @@ app.delete("/places/delete/:id", async (req, res) => {
 
 app.post("/bookings", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const userData = await getUserDataFromReq(req);
+  const { token } = req.cookies;
+  if(token) {
+    const userData = await getUserDataFromReq(req);
   const { place, checkIn, checkOut, numberOfGuests, name, phone, price } = req.body;
 
-  // Kiểm tra ngày check-in phải trước ngày check-out
   if (new Date(checkIn) >= new Date(checkOut)) {
     res.status(400).json({ message: "Invalid time" });
     return;
@@ -406,6 +418,7 @@ app.post("/bookings", async (req, res) => {
     .catch((err) => {
       throw err;
     });
+  }
 });
 
 app.delete("/bookings/delete/:id", async (req, res) => {
@@ -442,7 +455,7 @@ app.get("/bookings", async (req, res) => {
 
 app.post("/notiBooking", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const { user, name, booking, place, content } = req.body;
+  const { user, name, booking, place, checkIn, checkOut, content } = req.body;
   console.log(req.body)
 
   const notification = {
@@ -450,6 +463,8 @@ app.post("/notiBooking", (req, res) => {
     userAct: name,
     booking: booking,
     place: place,
+    checkIn: checkIn,
+    checkOut: checkOut,
     content: content
   };
 
@@ -488,5 +503,50 @@ app.get("/notifications", (req, res) => {
   });
 });
 
+app.post('/reviews/place/:id', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { token } = req.cookies;
+  const { id } = req.params;
+  const { rating, content } = req.body;
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+
+      const reviewDoc = await Review.create({
+        user: userData.id,
+        place: id,
+        rating,
+        content
+      });
+
+      // Calculate the average rating for the place
+      const place = await Place.findById(id);
+      let updatedRating = rating;
+
+      if (place.rating !== 0) {
+        updatedRating = (place.rating + rating) / 2;
+      }
+
+      // Update the place's rating
+      place.rating = updatedRating;
+      console.log(updatedRating)
+      await place.save();
+
+      res.json(reviewDoc);
+    });
+  }
+});
+
+
+app.get('/reviews/place/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reviews = await Review.find({ place: id }).populate('user');
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy đánh giá.' });
+  }
+});
 
 app.listen(4000);

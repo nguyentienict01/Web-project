@@ -47,7 +47,7 @@ export default function BookingWidget({ place }) {
       setRedirect(`/account/bookings/${bookingId}`);
       const placeTitle = place.title; 
       console.log(placeTitle)
-      createNotification(place.owner, name, bookingId, placeTitle);
+      createNotification(place.owner, name, bookingId, placeTitle, checkIn, checkOut);
     } catch (error) {
       if (error.response && error.response.data.message === "No available room") {
         alert("No available room. Please choose another time.");
@@ -61,14 +61,16 @@ export default function BookingWidget({ place }) {
     }
   }  
 
-  async function createNotification(userId, name, bookingId, placeTitle) {
+  async function createNotification(userId, name, bookingId, placeTitle, checkIn, checkOut) {
     try {
       await axios.post("http://localhost:4000/notiBooking", {
         user: userId,
         name: name,
         booking: bookingId,
         place: placeTitle,
-        content: "booking"
+        checkIn: checkIn,
+        checkOut: checkOut,
+        content: "Booking"
       });
       console.log("Thông báo đã được tạo thành công");
     } catch (error) {

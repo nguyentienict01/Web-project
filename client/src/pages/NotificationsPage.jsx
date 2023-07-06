@@ -22,6 +22,17 @@ function NotificationsPage() {
     return format(new Date(date), "HH:mm:ss dd/MM/yyyy");
   };
 
+  const handleAccept = async (notificationId) => {
+    try {
+      await axios.post("/notiConfirmBooking", { notificationId });
+      console.log("Accept successful");
+      // Refresh notifications
+      getNotifications();
+    } catch (error) {
+      console.error("Lỗi khi xác nhận booking:", error);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold mt-10">Notifications</h1>
@@ -30,12 +41,16 @@ function NotificationsPage() {
           notifications?.map((notification, index) => (
             <div className="w-full flex" key={notification?._id || index}>
               <div className="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-md mb-6">
-                <div className="flex-col items-center ">
+                <div className="flex-col items-center">
                   <div className="font-medium">Name: {notification.userAct}</div>
                   <div className="font-medium text-blue-500">Place: {notification.place}</div>
+                  <div className="font-medium text-orange-500">Check-in: {formatDate(notification.checkIn)}</div>
+                  <div className="font-medium text-gray-500">Check-out: {formatDate(notification.checkOut)}</div>
                   <div className="font-medium text-red-500">Content: {notification.content}</div>
                 </div>
-                <div className="text-gray-500">{formatDate(notification.date)}</div>
+                <div>
+                  <div className="text-gray-500 text-center">{formatDate(notification.date)}</div>
+                </div>
               </div>
             </div>
           ))
@@ -45,6 +60,7 @@ function NotificationsPage() {
       </div>
     </div>
   );
+
 }
 
 export default NotificationsPage;
