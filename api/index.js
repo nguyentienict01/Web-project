@@ -384,40 +384,49 @@ app.delete("/places/delete/:id", async (req, res) => {
 app.post("/bookings", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
-  if(token) {
+  const today = new Date();
+  if (token) {
     const userData = await getUserDataFromReq(req);
-  const { place, checkIn, checkOut, numberOfGuests, name, phone, price } = req.body;
+    const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
+      req.body;
 
-  if (new Date(checkIn) >= new Date(checkOut)) {
-    res.status(400).json({ message: "Invalid time" });
-    return;
-  }
+    if (new Date(checkIn) <= today) {
+      res.status(400).json({ message: "Invalid time" });
+      return;
+    }
 
-  const existingBookings = await Booking.find({
-    place: place,
-    checkIn: { $lt: new Date(checkOut) },
-    checkOut: { $gt: new Date(checkIn) },
-  });
-  if (existingBookings.length > 0) {
-    res.status(400).json({ message: "No available room" });
-    return;
-  }
-  Booking.create({
-    place,
-    checkIn,
-    checkOut,
-    numberOfGuests,
-    name,
-    phone,
-    price,
-    user: userData.id,
-  })
-    .then((doc) => {
-      res.json(doc);
-    })
-    .catch((err) => {
-      throw err;
+    if (new Date(checkIn) >= new Date(checkOut)) {
+      res.status(400).json({ message: "Invalid time" });
+      return;
+    }
+
+    const existingBookings = await Booking.find({
+      place: place,
+      checkIn: { $lt: new Date(checkOut) },
+      checkOut: { $gt: new Date(checkIn) },
     });
+
+    if (existingBookings.length > 0) {
+      res.status(400).json({ message: "No available room" });
+      return;
+    }
+
+    Booking.create({
+      place,
+      checkIn,
+      checkOut,
+      numberOfGuests,
+      name,
+      phone,
+      price,
+      user: userData.id,
+    })
+      .then((doc) => {
+        res.json(doc);
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 });
 
