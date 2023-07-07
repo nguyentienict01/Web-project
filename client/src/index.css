@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+textarea {
+  @apply w-full border my-1 py-2 px-3 rounded-2xl;
+}
+textarea {
+  height: 140px;
+}
+
+button,
+input:not([type="checkbox"]) {
+  @apply bg-gray-300;
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  text-align: inherit;
+  font: inherit;
+  border-radius: 0;
+  appearance: none;
+  outline: none;
+}
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="password"] {
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 4px 12px;
+  transition: all 150ms ease-in-out;
+}
+
+input[type="text"]:hover,
+input[type="text"]:focus,
+input[type="number"]:hover,
+input[type="number"]:focus,
+input[type="tel"]:hover,
+input[type="tel"]:focus,
+input[type="email"]:hover,
+input[type="email"]:focus,
+input[type="password"]:hover,
+input[type="password"]:focus {
+  border: 1px solid rgb(75 85 99);
+}
+button {
+  @apply bg-gray-300;
+}
+button.primary {
+  background-color: #f5385d;
+  @apply bg-primary p-2 w-full text-white rounded-2xl;
+}
+button.primary{
+    background-color: #F5385D;
+    @apply bg-primary p-2 w-full text-white rounded-2xl;
+}
+button.secondary{
+    background-color: #6fe644;
+    @apply bg-green-500 p-2 w-full text-white rounded-2xl;
+}
+
+.img-magnifier-container {
+  position: relative;
+}
+
+.magnifier-img {
+  width: auto;
+  height: 80vh;
+}
+
+.magnifier-image {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #fff;
+}
