@@ -18,8 +18,8 @@ export default function FavoritesPage() {
   return (
     <div>
       <AccountNav />
-      {favorites.length > 0 && favorites.map(place => (
-        <div className="mt-4">
+      {favorites.length > 0 && favorites.map((place, index) => (
+        <div key={index} className="mt-4">
           <Link to={'/place/id/' + place._id} className="flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl">
             <div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
               <PlaceImg place={place} />

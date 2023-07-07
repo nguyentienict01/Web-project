@@ -353,7 +353,7 @@ app.get("/places/search", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { title } = req.query;
   console.log(title);
-  const places = await Place.find({ title: new RegExp(title, "i") });
+  const places = await Place.find({$or: [{ title: new RegExp(title, "i") }, {address: new RegExp(title, "i")}]});
   res.json(places);
 });
 
