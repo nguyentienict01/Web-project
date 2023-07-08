@@ -85,6 +85,7 @@ function RecommendationPage() {
           </label>
           <div className="w-full flex range-price-name">
             <span>0$</span>
+            <span>{priceRange[0]}$ - {priceRange[1]}$</span>
             <span>300$</span>
           </div>
           <input
