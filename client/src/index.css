@@ -80,3 +80,11 @@ button.secondary{
   height: 200px;
   border: 2px solid #fff;
 }
+#minmax-range {
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity));;
+}
+
+.range-price-name {
+  justify-content: space-between;
+}
+
